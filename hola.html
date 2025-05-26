@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos de Comida</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffe5b4; /* Fondo beige */
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      text-align: center;
+      background-color: orange;
+      color: white;
+      padding: 15px;
+      font-size: 2em;
+    }
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .product-card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      text-align: center;
+    }
+    .product-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .product-card h3 {
+      margin: 10px 0;
+    }
+    .product-card p {
+      color: green;
+      font-weight: bold;
+    }
+    .ticket-container {
+      padding: 20px;
+      text-align: center;
+    }
+    .ticket {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin: 20px auto;
+      width: 300px;
+      text-align: left;
+      display: none;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    select {
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+<header>Productos de Comida</header>
+
+<div class="product-list">
+  <div class="product-card">
+    <img src="C:\Users\Asus\Pictures\gorditas de chicharron.jpg" alt="Gorditas de chicharrón">
+    <h3>Gorditas de Chicharrón</h3>
+    <p>$25</p>
+    <select id="quantity-chicharron">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+    <button onclick="addToCart('Gorditas de Chicharrón', 25, 'quantity-chicharron')">Agregar</button>
+  </div>
+  <div class="product-card">
+    <img src="C:\Users\Asus\Pictures\quesa2.jpeg" alt="Gorditas de pollo">
+    <h3>Gorditas de Pollo</h3>
+    <p>$25</p>
+    <select id="quantity-pollo">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+    <button onclick="addToCart('Gorditas de Pollo', 25, 'quantity-pollo')">Agregar</button>
+  </div>
+  <div class="product-card">
+    <img src="C:\Users\Asus\Pictures\gorditas de requeson.png" alt="Gorditas de requesón">
+    <h3>Gorditas de Requesón</h3>
+    <p>$25</p>
+    <select id="quantity-requeson">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+    <button onclick="addToCart('Gorditas de Requesón', 25, 'quantity-requeson')">Agregar</button>
+  </div>
+  <div class="product-card">
+    <img src="C:\Users\Asus\Pictures\tostada de tinga.jpeg" alt="Tostadas de tinga">
+    <h3>Tostadas de Tinga</h3>
+    <p>$25</p>
+    <select id="quantity-tinga">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+    <button onclick="addToCart('Tostadas de Tinga', 25, 'quantity-tinga')">Agregar</button>
+  </div>
+  <div class="product-card">
+    <img src="C:\Users\Asus\Pictures\tostada de pata.jpeg" alt="Tostadas de pata">
+    <h3>Tostadas de Pata</h3>
+    <p>$25</p>
+    <select id="quantity-pata">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+    <button onclick="addToCart('Tostadas de Pata', 25, 'quantity-pata')">Agregar</button>
+  </div>
+</div>
+
+<div class="ticket-container">
+  <button onclick="generateTicket()">Generar Ticket</button>
+  <div id="ticket" class="ticket"></div>
+</div>
+
+<script>
+  const cart = [];
+
+  function addToCart(product, price, quantityId) {
+    const quantity = parseInt(document.getElementById(quantityId).value);
+    cart.push({ product, price, quantity });
+    updateTicket();
+  }
+
+  function updateTicket() {
+    const ticketElement = document.getElementById('ticket');
+    let total = 0;
+
+    if (cart.length === 0) {
+      ticketElement.style.display = 'none';
+      return;
+    }
+
+    ticketElement.innerHTML = 
+      <h3>Ticket de Compra</h3>
+      <ul>
+        ${cart.map(item => {
+          total += item.price * item.quantity;
+          return <li>${item.quantity} x ${item.product} - $${item.price * item.quantity}</li>;
+        }).join('')}
+      </ul>
+      <p><strong>Total: $${total}</strong></p>
+      <button onclick="clearCart()">Limpiar Ticket</button>
+      <button onclick="window.print()">Imprimir Ticket</button>
+    ;
+    ticketElement.style.display = 'block';
+  }
+
+  function clearCart() {
+    cart.length = 0;
+    updateTicket();
+  }
+
+  function generateTicket() {
+    if (cart.length === 0) {
+      alert('El carrito está vacío');
+      return;
+    }
+    alert('Gracias por su compra. Su ticket ha sido generado.');
+  }
+</script>
+
+</body>
+</html>
